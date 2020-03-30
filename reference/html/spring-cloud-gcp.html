@@ -128,11 +128,12 @@ $(addBlockSwitches);
 </li>
 <li><a href="#google-cloud-pubsub">4. Google Cloud Pub/Sub</a>
 <ul class="sectlevel2">
-<li><a href="#sample">4.1. Sample</a></li>
-<li><a href="#pubsub-operations-template">4.2. Pub/Sub Operations &amp; Template</a></li>
-<li><a href="#reactive-stream-subscription">4.3. Reactive Stream Subscription</a></li>
-<li><a href="#pubsub-management">4.4. Pub/Sub management</a></li>
-<li><a href="#pubsub-configuration">4.5. Configuration</a></li>
+<li><a href="#spring-boot-actuator-support">4.1. Spring Boot Actuator Support</a></li>
+<li><a href="#sample">4.2. Sample</a></li>
+<li><a href="#pubsub-operations-template">4.3. Pub/Sub Operations &amp; Template</a></li>
+<li><a href="#reactive-stream-subscription">4.4. Reactive Stream Subscription</a></li>
+<li><a href="#pubsub-management">4.5. Pub/Sub management</a></li>
+<li><a href="#pubsub-configuration">4.6. Configuration</a></li>
 </ul>
 </li>
 <li><a href="#google-cloud-storage">5. Google Cloud Storage</a>
@@ -222,7 +223,7 @@ $(addBlockSwitches);
 <li><a href="#events-2">14.6. Events</a></li>
 <li><a href="#auditing-2">14.7. Auditing</a></li>
 <li><a href="#partitioning-data-by-namespace">14.8. Partitioning Data by Namespace</a></li>
-<li><a href="#spring-boot-actuator-support">14.9. Spring Boot Actuator Support</a></li>
+<li><a href="#spring-boot-actuator-support-2">14.9. Spring Boot Actuator Support</a></li>
 <li><a href="#sample-10">14.10. Sample</a></li>
 </ul>
 </li>
@@ -896,20 +897,43 @@ The provider can help determine programmatically in which GCP environment (App E
 <p>This starter is also available from <a href="https://start.spring.io">Spring Initializr</a> through the <code>GCP Messaging</code> entry.</p>
 </div>
 <div class="sect2">
-<h3 id="sample"><a class="anchor" href="#sample"></a><a class="link" href="#sample">4.1. Sample</a></h3>
+<h3 id="spring-boot-actuator-support"><a class="anchor" href="#spring-boot-actuator-support"></a><a class="link" href="#spring-boot-actuator-support">4.1. Spring Boot Actuator Support</a></h3>
+<div class="sect3">
+<h4 id="cloud-pubsub-health-indicator"><a class="anchor" href="#cloud-pubsub-health-indicator"></a><a class="link" href="#cloud-pubsub-health-indicator">4.1.1. Cloud Pub/Sub Health Indicator</a></h4>
+<div class="paragraph">
+<p>If you are using Spring Boot Actuator, you can take advantage of the Cloud Pub/Sub health indicator called <code>pubsub</code>.
+The health indicator will verify whether Cloud Pub/Sub is up and accessible by your application.
+To enable it, all you need to do is add the <a href="https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready">Spring Boot Actuator</a> to your project.
+To disable the Cloud Pub/Sub indicator, set <code>management.health.pubsub.enabled</code> to <code>false</code>.</p>
+</div>
+<div class="paragraph">
+<p>The <code>pubsub</code> indicator will then roll up to the overall application status visible at <a href="http://localhost:8080/actuator/health" class="bare">localhost:8080/actuator/health</a> (use the <code>management.endpoint.health.show-details</code> property to view per-indicator details).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sample"><a class="anchor" href="#sample"></a><a class="link" href="#sample">4.2. Sample</a></h3>
 <div class="paragraph">
 <p>Sample applications for <a href="https://github.com/spring-cloud/spring-cloud-gcp/tree/master/spring-cloud-gcp-samples/spring-cloud-gcp-pubsub-sample">using the template</a> and <a href="https://github.com/spring-cloud/spring-cloud-gcp/tree/master/spring-cloud-gcp-samples/spring-cloud-gcp-pubsub-reactive-sample">using a subscription-backed reactive stream</a> are available.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="pubsub-operations-template"><a class="anchor" href="#pubsub-operations-template"></a><a class="link" href="#pubsub-operations-template">4.2. Pub/Sub Operations &amp; Template</a></h3>
+<h3 id="pubsub-operations-template"><a class="anchor" href="#pubsub-operations-template"></a><a class="link" href="#pubsub-operations-template">4.3. Pub/Sub Operations &amp; Template</a></h3>
 <div class="paragraph">
 <p><code>PubSubOperations</code> is an abstraction that allows Spring users to use Google Cloud Pub/Sub without depending on any Google Cloud Pub/Sub API semantics.
 It provides the common set of operations needed to interact with Google Cloud Pub/Sub.
 <code>PubSubTemplate</code> is the default implementation of <code>PubSubOperations</code> and it uses the <a href="https://github.com/GoogleCloudPlatform/google-cloud-java/tree/master/google-cloud-pubsub">Google Cloud Java Client for Pub/Sub</a> to interact with Google Cloud Pub/Sub.</p>
 </div>
 <div class="sect3">
-<h4 id="publishing-to-a-topic"><a class="anchor" href="#publishing-to-a-topic"></a><a class="link" href="#publishing-to-a-topic">4.2.1. Publishing to a topic</a></h4>
+<h4 id="publishing-to-a-topic"><a class="anchor" href="#publishing-to-a-topic"></a><a class="link" href="#publishing-to-a-topic">4.3.1. Publishing to a topic</a></h4>
 <div class="paragraph">
 <p><code>PubSubTemplate</code> provides asynchronous methods to publish messages to a Google Cloud Pub/Sub topic.
 The <code>publish()</code> method takes in a topic name to post the message to, a payload of a generic type and, optionally, a map with the message headers.
@@ -929,7 +953,7 @@ pubSubTemplate.publish(topicName, "message", headers).get();</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="subscribing-to-a-subscription"><a class="anchor" href="#subscribing-to-a-subscription"></a><a class="link" href="#subscribing-to-a-subscription">4.2.2. Subscribing to a subscription</a></h4>
+<h4 id="subscribing-to-a-subscription"><a class="anchor" href="#subscribing-to-a-subscription"></a><a class="link" href="#subscribing-to-a-subscription">4.3.2. Subscribing to a subscription</a></h4>
 <div class="paragraph">
 <p>Google Cloud Pub/Sub allows many subscriptions to be associated to the same topic.
 <code>PubSubTemplate</code> allows you to listen to subscriptions via the <code>subscribe()</code> method.
@@ -991,7 +1015,7 @@ This default behavior has been overridden in Spring Cloud GCP for consistency wi
 </div>
 </div>
 <div class="sect3">
-<h4 id="pulling-messages-from-a-subscription"><a class="anchor" href="#pulling-messages-from-a-subscription"></a><a class="link" href="#pulling-messages-from-a-subscription">4.2.3. Pulling messages from a subscription</a></h4>
+<h4 id="pulling-messages-from-a-subscription"><a class="anchor" href="#pulling-messages-from-a-subscription"></a><a class="link" href="#pulling-messages-from-a-subscription">4.3.3. Pulling messages from a subscription</a></h4>
 <div class="paragraph">
 <p>Google Cloud Pub/Sub supports synchronous pulling of messages from a subscription.
 This is different from subscribing to a subscription, in the sense that subscribing is an asynchronous task.</p>
@@ -1082,7 +1106,7 @@ All <code>ack()</code>, <code>nack()</code>, and <code>modifyAckDeadline()</code
 </div>
 </div>
 <div class="sect3">
-<h4 id="json-support"><a class="anchor" href="#json-support"></a><a class="link" href="#json-support">4.2.4. JSON support</a></h4>
+<h4 id="json-support"><a class="anchor" href="#json-support"></a><a class="link" href="#json-support">4.3.4. JSON support</a></h4>
 <div class="paragraph">
 <p>For serialization and deserialization of POJOs using Jackson JSON, configure a <code>PubSubMessageConverter</code> bean, and the Spring Boot starter for GCP Pub/Sub will automatically wire it into the <code>PubSubTemplate</code>.</p>
 </div>
@@ -1174,7 +1198,7 @@ TestUser receivedTestUser = message.getPayload();</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="reactive-stream-subscription"><a class="anchor" href="#reactive-stream-subscription"></a><a class="link" href="#reactive-stream-subscription">4.3. Reactive Stream Subscription</a></h3>
+<h3 id="reactive-stream-subscription"><a class="anchor" href="#reactive-stream-subscription"></a><a class="link" href="#reactive-stream-subscription">4.4. Reactive Stream Subscription</a></h3>
 <div class="paragraph">
 <p>It is also possible to acquire a reactive stream backed by a subscription.
 To do so, a Project Reactor dependency (<code>io.projectreactor:reactor-core</code>) must be added to the project.
@@ -1220,7 +1244,7 @@ For example, if you only want to fetch 5 messages, you can use <code>limitReques
 </div>
 </div>
 <div class="sect2">
-<h3 id="pubsub-management"><a class="anchor" href="#pubsub-management"></a><a class="link" href="#pubsub-management">4.4. Pub/Sub management</a></h3>
+<h3 id="pubsub-management"><a class="anchor" href="#pubsub-management"></a><a class="link" href="#pubsub-management">4.5. Pub/Sub management</a></h3>
 <div class="paragraph">
 <p><code>PubSubAdmin</code> is the abstraction provided by Spring Cloud GCP to manage Google Cloud Pub/Sub resources.
 It allows for the creation, deletion and listing of topics and subscriptions.</p>
@@ -1243,7 +1267,7 @@ If given a <code>CredentialsProvider</code>, it creates a <code>TopicAdminClient
 The Spring Boot starter for GCP Pub/Sub auto-configures a <code>PubSubAdmin</code> object using the <code>GcpProjectIdProvider</code> and the <code>CredentialsProvider</code> auto-configured by the Spring Boot GCP Core starter.</p>
 </div>
 <div class="sect3">
-<h4 id="creating-a-topic"><a class="anchor" href="#creating-a-topic"></a><a class="link" href="#creating-a-topic">4.4.1. Creating a topic</a></h4>
+<h4 id="creating-a-topic"><a class="anchor" href="#creating-a-topic"></a><a class="link" href="#creating-a-topic">4.5.1. Creating a topic</a></h4>
 <div class="paragraph">
 <p><code>PubSubAdmin</code> implements a method to create topics:</p>
 </div>
@@ -1264,7 +1288,7 @@ The Spring Boot starter for GCP Pub/Sub auto-configures a <code>PubSubAdmin</cod
 </div>
 </div>
 <div class="sect3">
-<h4 id="deleting-a-topic"><a class="anchor" href="#deleting-a-topic"></a><a class="link" href="#deleting-a-topic">4.4.2. Deleting a topic</a></h4>
+<h4 id="deleting-a-topic"><a class="anchor" href="#deleting-a-topic"></a><a class="link" href="#deleting-a-topic">4.5.2. Deleting a topic</a></h4>
 <div class="paragraph">
 <p><code>PubSubAdmin</code> implements a method to delete topics:</p>
 </div>
@@ -1285,7 +1309,7 @@ The Spring Boot starter for GCP Pub/Sub auto-configures a <code>PubSubAdmin</cod
 </div>
 </div>
 <div class="sect3">
-<h4 id="listing-topics"><a class="anchor" href="#listing-topics"></a><a class="link" href="#listing-topics">4.4.3. Listing topics</a></h4>
+<h4 id="listing-topics"><a class="anchor" href="#listing-topics"></a><a class="link" href="#listing-topics">4.5.3. Listing topics</a></h4>
 <div class="paragraph">
 <p><code>PubSubAdmin</code> implements a method to list topics:</p>
 </div>
@@ -1308,7 +1332,7 @@ The Spring Boot starter for GCP Pub/Sub auto-configures a <code>PubSubAdmin</cod
 </div>
 </div>
 <div class="sect3">
-<h4 id="creating-a-subscription"><a class="anchor" href="#creating-a-subscription"></a><a class="link" href="#creating-a-subscription">4.4.4. Creating a subscription</a></h4>
+<h4 id="creating-a-subscription"><a class="anchor" href="#creating-a-subscription"></a><a class="link" href="#creating-a-subscription">4.5.4. Creating a subscription</a></h4>
 <div class="paragraph">
 <p><code>PubSubAdmin</code> implements a method to create subscriptions to existing topics:</p>
 </div>
@@ -1349,7 +1373,7 @@ If <code>pushEndpoint</code> isn’t specified, the subscription uses message pu
 </div>
 </div>
 <div class="sect3">
-<h4 id="deleting-a-subscription"><a class="anchor" href="#deleting-a-subscription"></a><a class="link" href="#deleting-a-subscription">4.4.5. Deleting a subscription</a></h4>
+<h4 id="deleting-a-subscription"><a class="anchor" href="#deleting-a-subscription"></a><a class="link" href="#deleting-a-subscription">4.5.5. Deleting a subscription</a></h4>
 <div class="paragraph">
 <p><code>PubSubAdmin</code> implements a method to delete subscriptions:</p>
 </div>
@@ -1370,7 +1394,7 @@ If <code>pushEndpoint</code> isn’t specified, the subscription uses message pu
 </div>
 </div>
 <div class="sect3">
-<h4 id="listing-subscriptions"><a class="anchor" href="#listing-subscriptions"></a><a class="link" href="#listing-subscriptions">4.4.6. Listing subscriptions</a></h4>
+<h4 id="listing-subscriptions"><a class="anchor" href="#listing-subscriptions"></a><a class="link" href="#listing-subscriptions">4.5.6. Listing subscriptions</a></h4>
 <div class="paragraph">
 <p><code>PubSubAdmin</code> implements a method to list subscriptions:</p>
 </div>
@@ -1394,7 +1418,7 @@ If <code>pushEndpoint</code> isn’t specified, the subscription uses message pu
 </div>
 </div>
 <div class="sect2">
-<h3 id="pubsub-configuration"><a class="anchor" href="#pubsub-configuration"></a><a class="link" href="#pubsub-configuration">4.5. Configuration</a></h3>
+<h3 id="pubsub-configuration"><a class="anchor" href="#pubsub-configuration"></a><a class="link" href="#pubsub-configuration">4.6. Configuration</a></h3>
 <div class="paragraph">
 <p>The Spring Boot starter for Google Cloud Pub/Sub provides the following configuration options:</p>
 </div>
@@ -7518,7 +7542,7 @@ Every read, write, query, and transaction you perform will utilize the namespace
 </div>
 </div>
 <div class="sect2">
-<h3 id="spring-boot-actuator-support"><a class="anchor" href="#spring-boot-actuator-support"></a><a class="link" href="#spring-boot-actuator-support">14.9. Spring Boot Actuator Support</a></h3>
+<h3 id="spring-boot-actuator-support-2"><a class="anchor" href="#spring-boot-actuator-support-2"></a><a class="link" href="#spring-boot-actuator-support-2">14.9. Spring Boot Actuator Support</a></h3>
 <div class="sect3">
 <h4 id="cloud-datastore-health-indicator"><a class="anchor" href="#cloud-datastore-health-indicator"></a><a class="link" href="#cloud-datastore-health-indicator">14.9.1. Cloud Datastore Health Indicator</a></h4>
 <div class="paragraph">
